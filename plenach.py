@@ -74,8 +74,6 @@ while True:
   else:
     print(result)
   number = input(c.blue + '>>> ')
-  if number.startswith('{') and number.endswith('}'):
-    number = str(round(float(number.split('e').pop(0)[1:]) * (10 ** (int(number.split('e').pop()[:-1])-1))))
   result = ''
   number = re.sub('[^0-9]','',number)
   number = re.sub('^0*$','0',number)
