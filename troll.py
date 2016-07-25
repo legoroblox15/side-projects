@@ -7,7 +7,7 @@ def trolling(username,domain,path):
   def handler(signum, frame):
     pass
   signal.signal(signal.SIGTSTP, handler) 
-  time.sleep(1)
+  time.sleep(2)
   cursor = c.base1 + username + c.base01 + '@' + c.base00 + domain + ':' + c.yellow + path + c.cyan + '$' + c.base3 + ' '
   while True:
     try:
@@ -20,8 +20,9 @@ def trolling(username,domain,path):
       command = re.sub('\\W*','',command)
       if command == '':
         continue
-      time.sleep(.1)
+      time.sleep(.2)
       print(command + ': command not found')
     except (KeyboardInterrupt,EOFError,RuntimeError):
       print()
+
 trolling('error404','skilstak','side-projects')
