@@ -5,7 +5,7 @@ def trolling(username,domain,path):
   import re
   import signal
   def handler(signum, frame):
-    pass
+    pass # <-- code here
   signal.signal(signal.SIGTSTP, handler) 
   time.sleep(2)
   cursor = c.base1 + username + c.base01 + '@' + c.base00 + domain + ':' + c.yellow + path + c.cyan + '$' + c.base3 + ' '
