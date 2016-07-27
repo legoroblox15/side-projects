@@ -31,8 +31,24 @@ while True:
     times = 1
 
   for count in range(times):
-    if action == 'clear':
+    if action == 'help':
+      clear()
+      print(c.base3+'"'+c.blue+'help'+c.base3+'":                                                           '+c.orange+' Pulls up this list (duh).')
+      print(c.base3+'"'+c.blue+'clear'+c.base3+'":                                                          '+c.orange+' Clears your inventory.')
+      print(c.base3+'"'+c.blue+'get/give (Element Symbol) [However many times]'+c.base3+'":                 '+c.orange+' Adds a specified element to your inventory')
+      print(c.base3+'"'+c.blue+'discard/remove (Element Symbol) [However many times]'+c.base3+'":           '+c.orange+' Removes a specified element from your inventroy.')
+      print(c.base3+'"'+c.blue+'fuse (Element Symbol)&(Element Symbol) [However many times]'+c.base3+'":    '+c.orange+' Fuses the 2 elements together into one element.')
+      print(c.base3+'"'+c.blue+'split (Element Symbol) [However many times]'+c.base3+'":                    '+c.orange+' Spits the element into two other elements.\n')
+      print(c.green + 'Any command that has "[However many times]" will default to one and is not required in the syntax.')
+      try:
+        input(c.base3 + 'Press enter to continue...')
+      except (KeyboardInterrupt, EOFError):
+        clear()
+        break
+    
+    elif action == 'clear':
       have = {}
+    
   
     elif action == 'get' or action == 'give':
       if atom in table and atom in have:
