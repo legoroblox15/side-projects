@@ -33,38 +33,30 @@ try:
       players.remove(hider)
       seeker = players.pop()
       clear()
-      word = input(c.red+'K then, pick your word. No peeking '+seeker+' I swear.\n\n'+c.base3+'>>> ').strip().upper()
+      word = input(c.red+'K then, pick your word. No peeking '+seeker+', I swear.\n\n'+c.base3+'>>> ').strip().lower()
       while True:
         clear()
         if word in words:
           break
-        word = input(c.red+'"'+word+'" is not a word stupid, pick one.\n\n'+c.base3+'>>> ').strip().upper()
+        word = input(c.red+'"'+word+'" is not a valid word stupid, pick one.\n\n'+c.base3+'>>> ').strip().lower()
     elif hider == '2':
       hider = players.pop(random.randint(0,1))
       seeker = players.pop()
       clear()
-      word = input(c.red+'I picked '+hider+' because I felt like it. Now pick your word. No peeking '+seeker+' I swear.\n\n'+c.base3+'>>> ').strip().upper()
+      word = input(c.red+'I picked '+hider+' because I felt like it. Now pick your word. No peeking '+seeker+', I swear.\n\n'+c.base3+'>>> ').strip().lower()
       while True:
         clear()
         if word in words:
           break
-        word = input(c.red+'"'+word+'" is not a word stupid, pick one.\n\n'+c.base3+'>>> ').strip().upper()
-except(KeyboardInterrupt,EOFError):
-  clear()
+        word = input(c.red+'"'+word+'" is not a valid word stupid, pick one.\n\n'+c.base3+'>>> ').strip().lower()
 
-try:
   letters = {'a':c.base3+'a','b':c.base3+'b','c':c.base3+'c','d':c.base3+'d','e':c.base3+'e','f':c.base3+'f','g':c.base3+'g','h':c.base3+'h','i':c.base3+'i','j':c.base3+'j','k':c.base3+'k','l':c.base3+'l','m':c.base3+'m','n':c.base3+'n','o':c.base3+'o','p':c.base3+'p','q':c.base3+'q','r':c.base3+'r','s':c.base3+'s','t':c.base3+'t','u':c.base3+'u','v':c.base3+'v','w':c.base3+'w','x':c.base3+'x','y':c.base3+'y','z':c.base3+'z'}
+  guesses = ['       ','       ','       ','       ','       ','       ']
+  all_guesses = []
+  tries = 0
+  test = ''
   while True:
     clear()
-    prlist = []
-    for item in letters:
-      prlist.append(item)
-    prlist.sort()
-    for printit in prlist:
-      print(letters[printit])
-    print()  
-    
-    test = input(c.base3+'>>> ')
     
     if test in letters:
       if c.base3 in letters[test]:
@@ -73,6 +65,61 @@ try:
         letters[test] = c.green + test
       elif c.green in letters[test]:
         letters[test] = c.base3 + test
-
+        
+    prlist = []
+    for item in letters:
+      prlist.append(item)
+    prlist.sort()
+    
+    line1 = ''
+    for count in range(6):
+      line1 += ' ' + letters[prlist.pop(0)]
+    
+    line2 = ''
+    for count in range(6):
+      line2 += ' ' + letters[prlist.pop(0)]
+    
+    line3 = ''
+    for count in range(6):
+      line3 += ' ' + letters[prlist.pop(0)]
+    
+    line4 = ''
+    for count in range(6):
+      line4 += ' ' + letters[prlist.pop(0)]
+    
+    line5 = '    '
+    for count in range(2):
+      line5 += ' ' + letters[prlist.pop(0)]
+    
+    if test in words and test != '':
+      if test not in all_guesses:
+        tries += 1
+        all_guesses.append(test)
+      if test == word:
+        break
+      common_letters = 0
+      test_letters = []
+      for letter in test:
+        if letter in word:
+          common_letters += 1
+      if test.upper() + ' ' + str(common_letters) not in guesses:
+        guesses.insert(0,test.upper() + ' ' + str(common_letters))
+        guesses.pop()
+    
+    line1 = c.base3 + '| ' + guesses.copy().pop(5) + ' |\t' + line1
+    line2 = c.base3 + '| ' + guesses.copy().pop(4) + ' |\t' + line2
+    line3 = c.base3 + '| ' + guesses.copy().pop(3) + ' |\t' + line3
+    line4 = c.base3 + '| ' + guesses.copy().pop(2) + ' |\t' + line4
+    line5 = c.base3 + '| ' + guesses.copy().pop(1) + ' |\t' + line5
+    line6 = c.base3 + '| ' + guesses.copy().pop(0) + ' | '+c.blue+'Total Guesses: ' + str(tries)
+    
+    print(line1)
+    print(line2)
+    print(line3)
+    print(line4)
+    print(line5)
+    print(line6)
+    test = input(c.base3+' ').strip().lower()
+      
 except(KeyboardInterrupt, EOFError):
   clear()
