@@ -64,9 +64,9 @@ while True:
             del have[atom]
           
     elif action == 'fuse':
-      atom = atom.split('&')    # Ha Ha Ha 
-      atom1 = atom.pop(0)
-      atom2 = atom.pop()
+      fusing = atom.split('&')    # Ha Ha Ha 
+      atom1 = fusing.pop(0)
+      atom2 = fusing.pop()
       if atom1 in have and atom2 in have:
         if have[atom1] != 0 and have[atom2] != 0:
           total_mass = table[atom1] + table[atom2]

@@ -8,50 +8,24 @@ def clear():
   print(c.clear,end='')
 
 try:
+  clear()
   while True:
-    clear()
     mode = input(c.base3+'Hey! Jotto is a fun game, who are you playing with?\n'+c.blue+'[1] Another person.\n'+c.orange+'[2] You.\n\n'+c.base3+'>>> ')
     if mode == '1' or mode == '2':
       break
   clear()
   if mode == '1':
-    p1 = input(c.red + "Oh, okay, I see how it is! What's your name!?\n\n"+c.base3+'>>> ')
-    clear()
-    p2 = input(c.red + 'Well then! "'+p1+ '" who\'s this so called "other person"\'s name!?\n\n'+c.base3+'>>> ')
+    word = input(c.base3 + 'Please type your word\n>>> ').strip().lower()
     while True:
       clear()
-      hider = input(c.red + "Whatever. Who's the hider? Or do you want me to deside?\n"+c.blue+"[1] We've desided.\n"+c.orange+'[2] We want you to deside.\n\n'+c.base3+'>>> ')
-      if hider == '1' or hider == '2':
+      if word in words:
         break
-    players = [p1,p2]
-    if hider == '1':
-      while True:
-        clear()
-        hider = input(c.red + 'WELL WHO IS IT THEN!?\n\n'+c.base3+'>>> ')
-        if hider == p1 or hider == p2:
-          break
-      players.remove(hider)
-      seeker = players.pop()
-      clear()
-      word = input(c.red+'K then, pick your word. No peeking '+seeker+', I swear.\n\n'+c.base3+'>>> ').strip().lower()
-      while True:
-        clear()
-        if word in words:
-          break
-        word = input(c.red+'"'+word+'" is not a valid word stupid, pick one.\n\n'+c.base3+'>>> ').strip().lower()
-    elif hider == '2':
-      hider = players.pop(random.randint(0,1))
-      seeker = players.pop()
-      clear()
-      word = input(c.red+'I picked '+hider+' because I felt like it. Now pick your word. No peeking '+seeker+', I swear.\n\n'+c.base3+'>>> ').strip().lower()
-      while True:
-        clear()
-        if word in words:
-          break
-        word = input(c.red+'"'+word+'" is not a valid word stupid, pick one.\n\n'+c.base3+'>>> ').strip().lower()
-
+      else:
+        word = input(c.base3 + '"' + word.upper() + '" is not a word. Please type your word\n>>>')
+  elif mode == '2':
+    word = random.choice(words)
   letters = {'a':c.base3+'a','b':c.base3+'b','c':c.base3+'c','d':c.base3+'d','e':c.base3+'e','f':c.base3+'f','g':c.base3+'g','h':c.base3+'h','i':c.base3+'i','j':c.base3+'j','k':c.base3+'k','l':c.base3+'l','m':c.base3+'m','n':c.base3+'n','o':c.base3+'o','p':c.base3+'p','q':c.base3+'q','r':c.base3+'r','s':c.base3+'s','t':c.base3+'t','u':c.base3+'u','v':c.base3+'v','w':c.base3+'w','x':c.base3+'x','y':c.base3+'y','z':c.base3+'z'}
-  guesses = ['       ','       ','       ','       ','       ','       ']
+  guesses = ['       ','       ','       ','       ','       ','       ','       ','       ','       ','       ','       ','       ','       ','       ','       ','       ','       ','       ','       ','       ']
   all_guesses = []
   tries = 0
   test = ''
@@ -105,21 +79,31 @@ try:
       if test.upper() + ' ' + str(common_letters) not in guesses:
         guesses.insert(0,test.upper() + ' ' + str(common_letters))
         guesses.pop()
+        
     
-    line1 = c.base3 + '| ' + guesses.copy().pop(5) + ' |\t' + line1
-    line2 = c.base3 + '| ' + guesses.copy().pop(4) + ' |\t' + line2
-    line3 = c.base3 + '| ' + guesses.copy().pop(3) + ' |\t' + line3
-    line4 = c.base3 + '| ' + guesses.copy().pop(2) + ' |\t' + line4
-    line5 = c.base3 + '| ' + guesses.copy().pop(1) + ' |\t' + line5
-    line6 = c.base3 + '| ' + guesses.copy().pop(0) + ' | '+c.blue+'Total Guesses: ' + str(tries)
+      
+    print(c.base3 + '| ' + guesses.copy().pop(19) + ' |\t' + line1)
+    print(c.base3 + '| ' + guesses.copy().pop(18) + ' |\t' + line2)
+    print(c.base3 + '| ' + guesses.copy().pop(17) + ' |\t' + line3)
+    print(c.base3 + '| ' + guesses.copy().pop(16) + ' |\t' + line4)
+    print(c.base3 + '| ' + guesses.copy().pop(15) + ' |\t' + line5)
+    print(c.base3 + '| ' + guesses.copy().pop(14) + ' | '+c.blue+'Total Guesses: ' + str(tries))
+    print(c.base3 + '| ' + guesses.copy().pop(13) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(12) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(11) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(10) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(9) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(8) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(7) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(6) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(5) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(4) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(3) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(2) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(1) + ' |')
+    print(c.base3 + '| ' + guesses.copy().pop(0) + ' |')
     
-    print(line1)
-    print(line2)
-    print(line3)
-    print(line4)
-    print(line5)
-    print(line6)
-    test = input(c.base3+' ').strip().lower()
+    test = input(c.base3+'  ').strip().lower()
       
 except(KeyboardInterrupt, EOFError):
   clear()
