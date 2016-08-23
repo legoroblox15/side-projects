@@ -4,147 +4,154 @@ import random
 def clear():
   print(c.clear,end='')
 
-dungeon = [[' ' for x in range(10)] for y in range(10)]
+  
 
-exit_x = random.randint(0,9) 
-exit_y = random.randint(0,9)
+def build_dungeon():
+  global dungeon
+  
+  dungeon = [[c.red + '#' for x in range(10)] for y in range(10)]
+  
+  exit_x = random.randint(0,9) 
+  exit_y = random.randint(0,9)
 
+  p_x = random.randint(0,9)
+  p_y = random.randint(0,9)
 
-p_x = random.randint(0,9)
-p_y = random.randint(0,9)
+  dungeon[p_y][p_x] = c.blue + '@' + c.base3
 
-path_corner_x = p_x
-path_corner_y = p_y
-
-dungeon[p_y][p_x] = c.blue + '@' + c.base3
-
-path_tiles = []
-dir = None
-
-for lines in range(random.randint(4,8)):
-  while True:
-    prev_dir = dir
-    while True:
-      dir = random.randint(1,4)
-      if dir == prev_dir:
-        continue
-      elif dir += 2 == prev_dir or dir -= 2 == prev_dir:
-        continue:
-      else:
-        break
-    
-    if dir == 1:
-      if path_corner_x == 9:
-        continue
-      else:
-        length = random.randint(1, 9 - path_corner_x)
-        for path in range(length):
-          path_corner_x += 1
+  path_tiles = [[p_y,p_x]]
+  branches= [[p_y,p_x]]
+  
+  for branch in branches:
+    branching = True
+    while branching:
+      dir = 1 # 1 = up, 2 = right, 3 = down, 4 = left
+      if dir == 1: # up
+        if branch[0] == 0 or [branch[0]-2,branch[1]] in path_tiles:
+          pass
+        elif branch[0] == 1 or [branch[0]-3,branch[1]]:
+          path_tiles.append([branch[0]-1,branch[1]])
+          branches.append([branch[0]-1,branch[1]])
+        else:
+          path_tiles.append([branch[0]-1,branch[1]])
+          path_tiles.append([branch[0]-2,branch[1]])
+          branches.append([branch[0]-2,branch[1]])
+            
+      elif dir == 2: # right
+        if branch[1] == 9 or [branch[0],branch[1]+2] in path_tiles:
+          pass
+        elif branch[1] == 8 or [branch[0],branch[1]+3] in path_tiles:
+          path_tiles.append([branch[0],branch[1]+1])
+          branches.append([branch[0],branch[1]+1])
+        else:
+          path_tiles.append([branch[0],branch[1]+1])
+          path_tiles.append([branch[0],branch[1]+2])
+          branches.append([branch[0],branch[1]+2])
+            
+      elif dir == 3: # down
+        if branch[0] == 9 or [branch[0]+2,branch[1]] in path_tiles:
+          pass
+        elif branch[0] == 8 or [branch[0]+3,branch[1]] in path_tiles:
+          path_tiles.append([branch[0]+1,branch[1]])
+          branches.append([branch[0]+1,branch[1]])
+        else:
+          path_tiles.append([branch[0]+1,branch[1]])
+          path_tiles.append([branch[0]+2,branch[1]])
+          branches.append([branch[0]+2,branch[1]])
           
-          path_tiles.append([path_corner_y, path_corner_x])
-    
-    elif dir == 2:
-      if path_corner_y == 9:
-        continue
-      else:
-        length = random.randint(1, 9 - path_corner_y)
-        for path in range(length):
-          path_corner_y += 1
-          path_tiles.append([path_corner_y, path_corner_x])
-    
-    elif dir == 3:
-      if path_corner_x == 0:
-        continue
-      else:
-        length = random.randint(1, path_corner_x)
-        for path in range(length):
-          path_corner_x -= 1
-          path_tiles.append([path_corner_y, path_corner_x])
-    
-    elif dir == 4:
-      if path_corner_y == 0:
-        continue
-      else:
-        length = random.randint(1, path_corner_y)
-        for path in range(length):
-          path_corner_y -= 1
-          path_tiles.append([path_corner_y, path_corner_x])
-    break
+      elif dir == 4: # left
+        if branch[1] == 0 or [branch[0],branch[1]-2] in path_tiles:
+          pass
+        elif branch[1] == 1 or [branch[0],branch[1]-3] in path_tiles:
+          path_tiles.append([branch[0],branch[1]-1])
+          branches.append([branch[0],branch[1]-1])
+        else:
+          path_tiles.append([branch[0],branch[1]-1])
+          path_tiles.append([branch[0],branch[1]-2])
+          branches.append([branch[0],branch[1]-2])
+      dir += 1
+      if dir == 5:
+        branching = False
 
-dungeon[path_tiles[-1][0]][path_tiles[-1][1]] = c.green + '$'
-        
-for count in range(40):
-  while True:
-    wall_x = random.randint(0,9)
-    wall_y = random.randint(0,9)
-    if [wall_y, wall_x] in path_tiles:
-      continue
-    if dungeon[wall_y][wall_x] == ' ':
-      dungeon[wall_y][wall_x] = c.red + '#'
-      break
-    else:
-      continue
-  
-last_tile_rep = c.base3 + ' '
-
-def debug():
-  print(c.base3 + 'Player: ' + str(p_x) + ', ' + str(p_y))
-  print(c.base3 + 'Exit: ' + str(exit_x) + ', ' + str(exit_y))
-  
   for tile in path_tiles:
-    if ' ' in dungeon[tile[0]][tile[1]]:
-      dungeon[tile[0]][tile[1]] = c.yellow + '^'
+    dungeon[tile[0]][tile[1]] = c.base3 + ' '
+  
+  dungeon[path_tiles[-1][0]][path_tiles[-1][1]] = c.green + '$'
+  
+def moving():
+  last_tile_rep = c.base3 + ' '
+  while True:
+    clear()
+    for y_find in range(10):
+      for x_find in range(10):
+        if '@' in dungeon[y_find][x_find]:
+          p_y = y_find
+          p_x = x_find
+          
+    print(c.base3 + ' __________ ')
+    for pr_y in dungeon:
+      print(c.base3 + '|',end='')
+      for pr_x in pr_y:
+        print(pr_x,end='')
+      print(c.base3 + '|')
+    print(c.base3 + ' ---------- ')
+
+    try:
+      mv = input('>>> ')
+    except EOFError:
+      build_dungeon()
+      continue
+    if mv == 'w':
+      try:
+        if '#' not in dungeon[p_y-1][p_x] and p_y-1 >= 0:
+          last_tile = dungeon[p_y-1][p_x]
+          dungeon[p_y][p_x] = last_tile_rep
+          last_tile_rep = last_tile
+          p_y -= 1
+          dungeon[p_y][p_x] = c.blue + '@'
+      except IndexError:
+        pass
+    elif mv == 'a':
+      try:
+        if '#' not in dungeon[p_y][p_x-1] and p_x-1 >= 0:
+          last_tile = dungeon[p_y][p_x-1]
+          dungeon[p_y][p_x] = last_tile_rep
+          last_tile_rep = last_tile
+          p_x -= 1
+          dungeon[p_y][p_x] = c.blue + '@'
+      except IndexError:
+        pass
+    elif mv == 's':
+      try:
+        if '#' not in dungeon[p_y+1][p_x]:
+          last_tile = dungeon[p_y+1][p_x]
+          dungeon[p_y][p_x] = last_tile_rep
+          last_tile_rep = last_tile
+          p_y += 1
+          dungeon[p_y][p_x] = c.blue + '@'
+      except IndexError:
+        pass
+    elif mv == 'd':
+      try:
+        if '#' not in dungeon[p_y][p_x+1]:
+          last_tile = dungeon[p_y][p_x+1]
+          dungeon[p_y][p_x] = last_tile_rep
+          last_tile_rep = last_tile
+          p_x += 1
+          dungeon[p_y][p_x] = c.blue + '@'
+      except IndexError:
+        pass
+    if '$' in last_tile_rep:
+      clear()
+      input('Fin.')
+      break
       
 while True:
-  clear()
-  debug()
-  
-  print(c.base3 + ' __________ ')
-  for pr_y in dungeon:
-    print(c.base3 + '|',end='')
-    for pr_x in pr_y:
-      print(pr_x,end='')
-    print(c.base3 + '|')
-  print(c.base3 + ' ---------- ')
-  
-  mv = input('>>> ')
-  if mv == 'w':
-    try:
-      if '#' not in dungeon[p_y-1][p_x] and p_y-1 >= 0:
-        last_tile = dungeon[p_y-1][p_x]
-        dungeon[p_y][p_x] = last_tile_rep
-        last_tile_rep = last_tile
-        p_y -= 1
-        dungeon[p_y][p_x] = c.blue + '@'
-    except IndexError:
-      pass
-  elif mv == 'a':
-    try:
-      if '#' not in dungeon[p_y][p_x-1] and p_x-1 >= 0:
-        last_tile = dungeon[p_y][p_x-1]
-        dungeon[p_y][p_x] = last_tile_rep
-        last_tile_rep = last_tile
-        p_x -= 1
-        dungeon[p_y][p_x] = c.blue + '@'
-    except IndexError:
-      pass
-  elif mv == 's':
-    try:
-      if '#' not in dungeon[p_y+1][p_x]:
-        last_tile = dungeon[p_y+1][p_x]
-        dungeon[p_y][p_x] = last_tile_rep
-        last_tile_rep = last_tile
-        p_y += 1
-        dungeon[p_y][p_x] = c.blue + '@'
-    except IndexError:
-      pass
-  elif mv == 'd':
-    try:
-      if '#' not in dungeon[p_y][p_x+1]:
-        last_tile = dungeon[p_y][p_x+1]
-        dungeon[p_y][p_x] = last_tile_rep
-        last_tile_rep = last_tile
-        p_x += 1
-        dungeon[p_y][p_x] = c.blue + '@'
-    except IndexError:
-      pass
+  build_dungeon()
+  try:
+    moving()
+  except EOFError:
+    build_dungeon
+  except KeyboardInterrupt:
+    break
+clear()
