@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import skilstak.colors as c
 import random
+import time
 def clear():
   print(c.clear,end='')
 
@@ -23,55 +24,69 @@ def build_dungeon():
   branches= [[p_y,p_x]]
   
   for branch in branches:
-    branching = True
-    while branching:
-      dir = 1 # 1 = up, 2 = right, 3 = down, 4 = left
+    print('Branching from branch ' + str(branch))
+    dir = 1
+    while True:
+      # 1 = up, 2 = right, 3 = down, 4 = left
       if dir == 1: # up
+        print('  Branching up...')
         if branch[0] == 0 or [branch[0]-2,branch[1]] in path_tiles:
-          pass
+          print('    Branch ' + str(branch) + ' Cannot go up.')
         elif branch[0] == 1 or [branch[0]-3,branch[1]]:
+          print('    Branch ' + str(branch) + ' Can only go up one space.')
           path_tiles.append([branch[0]-1,branch[1]])
           branches.append([branch[0]-1,branch[1]])
         else:
+          print('    Branch ' + str(branch) + ' Can go up two spaces.')
           path_tiles.append([branch[0]-1,branch[1]])
           path_tiles.append([branch[0]-2,branch[1]])
           branches.append([branch[0]-2,branch[1]])
             
       elif dir == 2: # right
+        print('  Branching right...')
         if branch[1] == 9 or [branch[0],branch[1]+2] in path_tiles:
-          pass
+          print('    Branch ' + str(branch) + ' Cannot go right.')
         elif branch[1] == 8 or [branch[0],branch[1]+3] in path_tiles:
+          print('    Branch ' + str(branch) + ' Can only go right one space.')
           path_tiles.append([branch[0],branch[1]+1])
           branches.append([branch[0],branch[1]+1])
         else:
+          print('    Branch ' + str(branch) + ' Can go right two spaces.')
           path_tiles.append([branch[0],branch[1]+1])
           path_tiles.append([branch[0],branch[1]+2])
           branches.append([branch[0],branch[1]+2])
             
       elif dir == 3: # down
+        print('  Branching down...')
         if branch[0] == 9 or [branch[0]+2,branch[1]] in path_tiles:
-          pass
+          print('    Branch ' + str(branch) + ' Cannot go down.')
         elif branch[0] == 8 or [branch[0]+3,branch[1]] in path_tiles:
+          print('    Branch ' + str(branch) + ' Can only go down one space.')
           path_tiles.append([branch[0]+1,branch[1]])
           branches.append([branch[0]+1,branch[1]])
         else:
+          print('    Branch ' + str(branch) + ' Can go down two spaces.')
           path_tiles.append([branch[0]+1,branch[1]])
           path_tiles.append([branch[0]+2,branch[1]])
           branches.append([branch[0]+2,branch[1]])
           
       elif dir == 4: # left
+        print('  Branching left...')
         if branch[1] == 0 or [branch[0],branch[1]-2] in path_tiles:
-          pass
+          print('    Branch ' + str(branch) + ' Cannot go left.')
         elif branch[1] == 1 or [branch[0],branch[1]-3] in path_tiles:
+          print('    Branch ' + str(branch) + ' Can only go left one space.')
           path_tiles.append([branch[0],branch[1]-1])
           branches.append([branch[0],branch[1]-1])
         else:
+          print('    Branch ' + str(branch) + ' Can go left two spaces.')
           path_tiles.append([branch[0],branch[1]-1])
           path_tiles.append([branch[0],branch[1]-2])
           branches.append([branch[0],branch[1]-2])
+      time.sleep(1)
       dir += 1
       if dir == 5:
-        branching = False
+        break
 
   for tile in path_tiles:
     dungeon[tile[0]][tile[1]] = c.base3 + ' '
