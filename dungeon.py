@@ -8,16 +8,10 @@ def clear():
   
 
 def build_dungeon():
-  global dungeon
-  
   dungeon = [[c.red + '#' for x in range(25)] for y in range(25)]
 
-  seed_x = random.randint(0,9)
-  seed_y = random.randint(0,9)
-
-
-  path_tiles = [[seed_y,seed_x]]
-  branches = [[seed_y,seed_x,None]]
+  path_tiles = [[12,12]]
+  branches = [[12,12,None]]
   dead_ends = []
   
   while True:
@@ -81,10 +75,6 @@ def build_dungeon():
           path_tiles.append([branch[0],branch[1]-2])
           branches.append([branch[0],branch[1]-2,'left'])
           expanded = True
-      elif trials == 3 and expanded:
-        break
-      elif trials == 4 and expanded:
-        break
       if directions == []:
         break
     if branches == []:
@@ -100,8 +90,9 @@ def build_dungeon():
     if start != exit:
       break
   dungeon[start[0]][start[1]] = c.blue + '@'
+  return dungeon
   
-def moving():
+def moving(dungeon):
   last_tile_rep = c.base03 + '$'
   while True:
     clear()
@@ -170,11 +161,11 @@ def moving():
       break
       
 while True:
-  build_dungeon()
+  dungeon = build_dungeon()
   try:
-    moving()
+    moving(dungeon)
   except EOFError:
-    build_dungeon
+    dungeon = build_dungeon()
   except KeyboardInterrupt:
     break
 clear()
