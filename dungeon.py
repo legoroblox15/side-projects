@@ -2,6 +2,7 @@
 import skilstak.colors as c
 import random
 import time
+
 def clear():
   print(c.clear,end='')
 
