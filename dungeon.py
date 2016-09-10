@@ -125,16 +125,16 @@ def moving(dungeon):
     if p_x >= 1 and p_y <= 23:
       dungeon[p_y+1][p_x-1] = dungeon[p_y+1][p_x-1].split(c.base02).pop() # lower left
   
-    print(c.base3 + ' -------------------------')
+    print(c.base3 + '┌─────────────────────────┐')
     for pr_y in dungeon:
-      print(c.base3 + '|',end='')
+      print(c.base3 + '│',end='')
       for pr_x in pr_y:
         if c.base02 in pr_x:
           print(' ',end='')
         else:
           print(pr_x,end='')
-      print(c.base3 + '|')
-    print(c.base3 + ' -------------------------')
+      print(c.base3 + '│')
+    print(c.base3 + '└─────────────────────────┘')
 
     try:
       mv = input('>>> ')
