@@ -6,12 +6,12 @@ import time
 def clear():
   print(c.clear,end='')
 
-def build_dungeon(seed):
+def build_dungeon():
   dungeon = [[c.red + '#' for x in range(25)] for y in range(25)]
-
-  path_tiles = [seed]
-  branches = [seed]
+  path_tiles = [[12,12]]
+  branches = [[12,12,None]]
   dead_ends = []
+  colors = [c.yellow, c.orange, c.red, c.magenta, c.violet, c.blue, c.cyan, c.green]
   
   while True:
     branch = random.choice(branches)
@@ -93,21 +93,48 @@ def build_dungeon(seed):
   
 def moving(dungeon):
   last_tile_rep = c.base03 + '$'
+  for y_find in range(25):
+    for x_find in range(25):
+      if '@' in dungeon[y_find][x_find]:
+        p_y = y_find
+        p_x = x_find
+          
   while True:
     clear()
-    for y_find in range(25):
-      for x_find in range(25):
-        if '@' in dungeon[y_find][x_find]:
-          p_y = y_find
-          p_x = x_find
-          
-    print(c.base3 + ' _________________________ ')
+    if p_x >= 1:
+      dungeon[p_y][p_x-1] = dungeon[p_y][p_x-1].split(c.base02).pop() # left
+      
+    if p_x >= 1 and p_y >= 1:
+      dungeon[p_y-1][p_x-1] = dungeon[p_y-1][p_x-1].split(c.base02).pop() # upper left
+      
+    if p_y >= 1:
+      dungeon[p_y-1][p_x] = dungeon[p_y-1][p_x].split(c.base02).pop() # up  
+      
+    if p_x <= 23 and p_y >= 1:
+      dungeon[p_y-1][p_x+1] = dungeon[p_y-1][p_x+1].split(c.base02).pop() # upper right
+      
+    if p_x <= 23:
+      dungeon[p_y][p_x+1] = dungeon[p_y][p_x+1].split(c.base02).pop() # right
+      
+    if p_x <= 23 and p_y <= 23:
+      dungeon[p_y+1][p_x+1] = dungeon[p_y+1][p_x+1].split(c.base02).pop() # lower right
+      
+    if p_y <= 23:
+      dungeon[p_y+1][p_x] = dungeon[p_y+1][p_x].split(c.base02).pop() # down
+    
+    if p_x >= 1 and p_y <= 23:
+      dungeon[p_y+1][p_x-1] = dungeon[p_y+1][p_x-1].split(c.base02).pop() # lower left
+  
+    print(c.base3 + ' -------------------------')
     for pr_y in dungeon:
       print(c.base3 + '|',end='')
       for pr_x in pr_y:
-        print(pr_x,end='')
+        if c.base02 in pr_x:
+          print(' ',end='')
+        else:
+          print(pr_x,end='')
       print(c.base3 + '|')
-    print(c.base3 + ' ------------------------- ')
+    print(c.base3 + ' -------------------------')
 
     try:
       mv = input('>>> ')
@@ -157,14 +184,13 @@ def moving(dungeon):
     if c.green + '$' in last_tile_rep:
       clear()
       input('Fin.')
-      return [p_y,p_x,None]
       break
 
-seed = [12,12,None]      
+  
 while True:
-  dungeon = build_dungeon(seed)
+  dungeon = build_dungeon()
   try:
-    seed = moving(dungeon)
+    moving(dungeon)
   except KeyboardInterrupt:
     break
 clear()
