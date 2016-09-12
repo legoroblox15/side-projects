@@ -2,6 +2,7 @@
 import skilstak.colors as c
 import random
 import time
+from getch import getch
 
 def clear():
   print(c.clear,end='')
@@ -77,7 +78,7 @@ def set_path():
   return [path_tiles,branches]
 
 def build_dungeon():
-  darkness = ''
+  darkness = c.base02
   dungeon = [[darkness + c.red + '█' for x in range(25)] for y in range(25)]
   
   path_tiles = set_path()
@@ -93,19 +94,6 @@ def build_dungeon():
     if start != [path_tiles[-1][0],path_tiles[-1][1]]:
       break
   dungeon[start[0]][start[1]] = c.blue + '●'
-  
-  path_count = -1
-  for tile in path_tiles:
-    path_count += 1
-  
-  colors = [c.yellow, c.magenta, c.violet, c.blue, c.cyan, c.green, c.base00, c.base01] 
-  for color in colors:
-    while True:
-      key = random.randint(0,path_count)
-      door = random.randint(key+1,path_count)
-      if ' ' in dungeon[path_tiles[key][0]][path_tiles[key][1]] and ' ' in dungeon[path_tiles[door][0]][path_tiles[door][1]]:
-        dungeon[path_tiles[key][0]][path_tiles[key][1]] = darkness + color + '%'
-        dungeon[path_tiles[door][0]][path_tiles[door][1]] = darkness + colors + '&'
 
   return dungeon
   
@@ -117,6 +105,12 @@ def moving(dungeon):
       if '●' in dungeon[y_find][x_find]:
         p_y = y_find
         p_x = x_find
+        
+  for y_find in range(25):
+    for x_find in range(25):
+      if c.green + '$' in dungeon[y_find][x_find]:
+        exit_y = y_find
+        exit_x = x_find
           
   while True:
     clear()
@@ -143,7 +137,16 @@ def moving(dungeon):
     
     if p_x >= 1 and p_y <= 23:
       dungeon[p_y+1][p_x-1] = dungeon[p_y+1][p_x-1].split(c.base02).pop() # lower left
-  
+    
+    corner_x = exit_x
+    corner_y = p_y
+    
+    base = abs(p_x - corner_x)
+    height = abs(exit_y - corner_y)
+    
+    
+    #dungeon[corner_y][corner_x] = c.blue + '%'
+    
     print(c.base3 + '┌─────────────────────────┐')
     for pr_y in dungeon:
       print(c.base3 + '│',end='')
@@ -156,12 +159,12 @@ def moving(dungeon):
     print(c.base3 + '├─────────────────────────┤')
     print(c.base3 + '│'+c.base01+' *** '+tattle+' *** '+c.base3+'│') # Tattles need to be a total of 15 standard font widthed characters long
     print(c.base3 + '└─────────────────────────┘')
-
-    try:
-      mv = input('>>> ')
-    except EOFError:
-      build_dungeon()
-      continue
+    
+    mv = getch()
+    
+    if mv == 'e':
+      break
+    if mv == ''
     if mv == 'w':
       try:
         if '█' not in dungeon[p_y-1][p_x] and p_y-1 >= 0:
@@ -210,8 +213,7 @@ def moving(dungeon):
   
 while True:
   dungeon = build_dungeon()
-  try:
-    moving(dungeon)
-  except KeyboardInterrupt:
+  moving(dungeon)
+  if breaking:
     break
 clear()
