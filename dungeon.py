@@ -2,7 +2,7 @@
 import skilstak.colors as c
 import random
 import time
-from getch import getch
+import getch
 
 def clear():
   print(c.clear,end='')
@@ -75,28 +75,58 @@ def set_path():
         break
     if branches == []:
       break
-  return [path_tiles,branches]
+  return path_tiles
 
 def build_dungeon():
   darkness = c.base02
   dungeon = [[darkness + c.red + '█' for x in range(25)] for y in range(25)]
   
   path_tiles = set_path()
-  branches = path_tiles.pop()
-  path_tiles = path_tiles.pop()
-    
+  
+  total_tiles = -1
   for tile in path_tiles:
     dungeon[tile[0]][tile[1]] = c.base3 + ' '
+    total_tiles += 1
   
-  dungeon[path_tiles[-1][0]][path_tiles[-1][1]] = darkness + c.green + '$'
-  while True:
+  exit_tile = path_tiles[-1]
+  
+  dungeon[exit_tile[0]][exit_tile[1]] = darkness + c.green + '$'
+  
+  while True: 
     start = random.choice(path_tiles)
-    if start != [path_tiles[-1][0],path_tiles[-1][1]]:
+    if start != exit_tile:
       break
   dungeon[start[0]][start[1]] = c.blue + '●'
-
-  return dungeon
   
+  for count in range(10):
+    while True:
+      spot = random.choice(path_tiles)
+      if ' ' in dungeon[spot[0]][spot[1]]:
+        break
+    dungeon[spot[0]][spot[1]] = darkness + c.violet + '?'
+    
+  return dungeon
+
+def riddle_door():
+  while True:
+    clear()
+    print(c.orange + 'You come across a wall that has strange runes on it, You can barely make out this pattern\n')
+    coef = random.choice([-5,-4,-3,-2,-1,1,2,3,4,5])
+    b = random.randint(-6,6)
+    blank = random.randint(1,5)
+    answer = str(coef * blank + b)
+    sequence = ''
+    for x in range(1,6):
+      if x == blank:
+        sequence += '___  '
+      else:
+        sequence += str(coef * x + b) + '  '
+    if input(sequence + '\n>>> ') == answer:
+      clear()
+      getch.pause('"You passed the test..." Echos the door.')
+      clear()
+      return True
+
 def moving(dungeon):
   tattle = "It sure is dark"
   last_tile_rep = c.base03 + '$'
@@ -114,6 +144,10 @@ def moving(dungeon):
           
   while True:
     clear()
+    if '?' in last_tile_rep:
+      if riddle_door():  
+        last_tile_rep = ' '
+      
     if p_x >= 1:
       dungeon[p_y][p_x-1] = dungeon[p_y][p_x-1].split(c.base02).pop() # left
       
@@ -145,9 +179,20 @@ def moving(dungeon):
     height = abs(exit_y - corner_y)
     
     
-    #dungeon[corner_y][corner_x] = c.blue + '%'
+    left = base ** 2 + height ** 2
+    hypo = round(left ** .5)
+    hypo = hypo + random.randint(0,4) * random.choice([-1,1])
+    if hypo < 0:
+      hypo = 0
+    
+    if hypo <= 9:
+      hypo = str(hypo) + ' '
+    else:
+      hypo = str(hypo)
     
     print(c.base3 + '┌─────────────────────────┐')
+    print(c.base3 + '│  Shattered Compass: '+hypo+'  │')
+    print(c.base3 + '├─────────────────────────┤')
     for pr_y in dungeon:
       print(c.base3 + '│',end='')
       for pr_x in pr_y:
@@ -159,13 +204,15 @@ def moving(dungeon):
     print(c.base3 + '├─────────────────────────┤')
     print(c.base3 + '│'+c.base01+' *** '+tattle+' *** '+c.base3+'│') # Tattles need to be a total of 15 standard font widthed characters long
     print(c.base3 + '└─────────────────────────┘')
+    mv = getch.getch()
     
-    mv = getch()
+    if mv == 'x':
+      return False
     
-    if mv == 'e':
-      break
-    if mv == ''
-    if mv == 'w':
+    elif mv == 'n':
+      return True
+    
+    elif mv == 'w':
       try:
         if '█' not in dungeon[p_y-1][p_x] and p_y-1 >= 0:
           last_tile = dungeon[p_y-1][p_x]
@@ -207,13 +254,13 @@ def moving(dungeon):
         pass
     if c.green + '$' in last_tile_rep:
       clear()
-      input('Fin.')
-      break
+      getch.pause('Fin.')
+      return True
 
   
 while True:
   dungeon = build_dungeon()
-  moving(dungeon)
-  if breaking:
+  staying = moving(dungeon)
+  if not staying:
     break
 clear()

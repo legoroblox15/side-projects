@@ -45,19 +45,7 @@ for traceback in assembly:
       symbol_table += '\n'
 print(symbol_table)
 input('PRESS ENTER TO CONTINUE')
+print(c.clear)
 answer = set.pop()
-print(c.clear,end='')
-overload = random.randint(50,95)
-print('Progress: 0%')
-for percent in range(1,101):
-  wait = random.choice([True,False,False,False])
-  if wait:
-    time.sleep(random.randint(1,10)/10)
-  print(c.clear,end='')
-  print('Progress: ' + str(percent) + '%')
-  if overload == percent:
-    while True:
-      print(answer,end='')
-      time.sleep(.05)
-  else:
-    print(c.clear,end='')
+
+print(answer)
