@@ -4,6 +4,7 @@
 
 import skilstak.colors as c
 import re
+
 result = ''
 def get_triplet(digit_number):
   digit_number = re.sub('^0+(\\d)','\\1',digit_number)
@@ -75,7 +76,7 @@ while True:
     print(result)
   number = input(c.blue + '>>> ')
   result = ''
-  number = re.sub('[^0-9]','',number)
+  number = re.sub('\\D','',number)
   number = re.sub('^0*$','0',number)
   number = re.sub('^0+(\\d)','\\1',number)
   if number == '0':

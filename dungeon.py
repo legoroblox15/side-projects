@@ -108,24 +108,28 @@ def build_dungeon():
   return dungeon
 
 def riddle_door():
-  while True:
+  clear()
+  print(c.orange + 'You come across a wall that has strange runes on it, You can barely make out this pattern\n')
+  coef = random.choice([-5,-4,-3,-2,-1,1,2,3,4,5])
+  b = random.randint(-6,6)
+  blank = random.randint(1,5)
+  answer = str(coef * blank + b)
+  sequence = ''
+  for x in range(1,6):
+    if x == blank:
+      sequence += '___  '
+    else:
+      sequence += str(coef * x + b) + '  '
+  if input(sequence + '\n>>> ') == answer:
     clear()
-    print(c.orange + 'You come across a wall that has strange runes on it, You can barely make out this pattern\n')
-    coef = random.choice([-5,-4,-3,-2,-1,1,2,3,4,5])
-    b = random.randint(-6,6)
-    blank = random.randint(1,5)
-    answer = str(coef * blank + b)
-    sequence = ''
-    for x in range(1,6):
-      if x == blank:
-        sequence += '___  '
-      else:
-        sequence += str(coef * x + b) + '  '
-    if input(sequence + '\n>>> ') == answer:
-      clear()
-      getch.pause('"You passed the test..." Echos the door.')
-      clear()
-      return True
+    getch.pause('"You passed the test..." Echos the door.')
+    clear()
+    return True
+  else:
+    clear()
+    getch.pause('The wall rummbles in dissaproval. you start to get dizzy! When the dizziness subsides you feel somewhere new...')
+    clear()
+    return False
 
 def moving(dungeon):
   tattle = "It sure is dark"
@@ -147,7 +151,18 @@ def moving(dungeon):
     if '?' in last_tile_rep:
       if riddle_door():  
         last_tile_rep = ' '
-      
+      else:
+        while True:
+          x_new = random.randint(0,24)
+          y_new = random.randint(0,24)
+          if ' ' in dungeon[y_new][x_new]:
+            break
+          dungeon[p_y][p_x] = last_tile_rep
+          p_x = x_new
+          p_y = y_new
+          dungeon[p_y][p_x] = c.blue + '●'
+          last_tile_rep = ' '
+            
     if p_x >= 1:
       dungeon[p_y][p_x-1] = dungeon[p_y][p_x-1].split(c.base02).pop() # left
       

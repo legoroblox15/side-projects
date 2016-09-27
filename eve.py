@@ -6,49 +6,50 @@ def clear():
 import random
 import time
 
-strat = [[50]]
+strat = []
 strats = {}
 
 gen = 0
 
-while True:
+def use_strat(strat):
   clear()
   
   bk_strat = strat
   temp = 'hot'
-  won = False
   number = random.randint(1,100)
+  steps = 0
+  trial = 201
   
   print(c.blue+'Game: Okay, number set, guess away!')
   time.sleep(1)
-  print(c.green+'Eve: Hmmm...')
+  print(c.green+'Eve: Hmmm... ' + str(strat))
   while True:
+    steps += 1
     time.sleep(1)
-    if strat != []:
+    try:
       if temp == 'hot':
-        trial = strat.pop(0).pop(0) 
+        trial = strat.pop(0).pop(0)
       elif temp == 'cold':
         trial = strat.pop().pop(0)
-    else:
+    except IndexError:
       print(c.green + 'Eve: I give up')
       time.sleep(1)
       print(c.blue + 'Game: The number was ' + str(number) + '.')
-      break
+      return [bk_strat, steps, abs(trial - number)]
     print(c.green + 'Eve: ' + str(trial) + '?')
     
     if trial == number:
       print(c.blue + 'Game: Correct!')
       time.sleep(1)
       print(c.green + 'Eve: I did it!')
-      won = True
-      break
+      return [bk_strat, steps, 0]
     elif trial > number:
       print(c.blue + 'Game: Too hot!')
       temp = 'hot'
-      print(c.green + 'Eve: Darn!')
+      print(c.green + 'Eve: Darn!'+str(strat))
     else:
       print(c.blue + 'Game: Too cold!')
       temp = 'cold'
       print(c.green + 'Eve: Darn!')
-    closeness = abs(trial - number)
-    
+
+use_strat(strat)

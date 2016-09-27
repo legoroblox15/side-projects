@@ -30,7 +30,7 @@ chains = {4:'four (4) ↺',3:'three (3) ---> five (5) ---> four (4) ↺'}
 lengths = {1:'four (4) ↺',3:'three (3) ---> five (5) ---> four (4) ↺'}
 values = {'four (4) ↺':4, 'three (3) ---> five (5) ---> four (4) ↺':3}
 
-limit = 10000
+limit = 1000000
 number = 4
 
 while True:
@@ -48,12 +48,20 @@ while True:
 
 best_length = 0
 best_chains = []
+
 while True:
+  restart = False
   for chain in lengths:
     if chain > best_length:
       best_length = chain
       restart = True
-
+  if restart:
+    print(str(best_length) + " is now the new standard")
+    continue
+  else:
+    break
+    
+print("Filertering stage two...")
 for chain in lengths:
   if chain == best_length:
     best_chains.append(lengths[chain])
