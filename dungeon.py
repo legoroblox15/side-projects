@@ -7,6 +7,16 @@ import getch
 def clear():
   print(c.clear,end='')
 
+def add_tiles(tile,count,dungeon):
+  for adding in range(count):
+    while True:
+      y = random.randint(0,24)
+      x = random.randint(0,24)
+      if ' ' in dungeon[y][x]:
+        dungeon[y][x] = tile
+        break
+  return dungeon
+
 def set_path():  
   seed_x = random.randint(0,24)
   seed_y = random.randint(0,24)
@@ -88,22 +98,11 @@ def build_dungeon():
     dungeon[tile[0]][tile[1]] = c.base3 + ' '
     total_tiles += 1
   
-  exit_tile = path_tiles[-1]
+  dungeon = add_tiles(c.base02 + c.green + '$',1,dungeon)
   
-  dungeon[exit_tile[0]][exit_tile[1]] = darkness + c.green + '$'
+  dungeon = add_tiles(c.blue + '●',1,dungeon)
   
-  while True: 
-    start = random.choice(path_tiles)
-    if start != exit_tile:
-      break
-  dungeon[start[0]][start[1]] = c.blue + '●'
-  
-  for count in range(10):
-    while True:
-      spot = random.choice(path_tiles)
-      if ' ' in dungeon[spot[0]][spot[1]]:
-        break
-    dungeon[spot[0]][spot[1]] = darkness + c.violet + '?'
+  dungeon = add_tiles(c.base02 + c.violet + '?', 10, dungeon)
     
   return dungeon
 
