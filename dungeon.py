@@ -205,7 +205,7 @@ def moving(dungeon):
       hypo = str(hypo)
     
     print(c.base3 + '┌─────────────────────────┐')
-    print(c.base3 + '│  Shattered Compass: '+hypo+'  │')
+    print(c.base3 + '│  Shattered Compass: ' + hypo + '  │')
     print(c.base3 + '├─────────────────────────┤')
     for pr_y in dungeon:
       print(c.base3 + '│',end='')
@@ -270,7 +270,6 @@ def moving(dungeon):
       clear()
       getch.pause('Fin.')
       return True
-
   
 while True:
   dungeon = build_dungeon()
