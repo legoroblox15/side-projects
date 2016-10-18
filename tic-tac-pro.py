@@ -14,7 +14,7 @@ while True:
   if withp in ['1','2']:
     break
     
-bts = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
+bts = ['1','2','3','4','5','6','7','8','9']
 
 running = True
 
@@ -31,8 +31,8 @@ while True:
       x = int(x)
     except ValueError:
       continue
-    if x >= 1 and x <= 9 and bts[x-1] == ' ':
-      bts[x-1] = 'x'
+    if x >= 1 and x <= 9 and bts[x-1] and bts[x-1] in ['1','2','3','4','5','6','7','8','9']:
+      bts[x-1] = c.red + 'x' + c.base3
       break
     
   clear()
@@ -51,6 +51,6 @@ while True:
         o = int(o)
       except ValueError:
         continue
-      if o >= 1 and o <= 9 and bts[o-1] == ' ':
-        bts[o-1] = 'o'
+      if o >= 1 and o <= 9 and bts[o-1] and bts[o-1] in ['1','2','3','4','5','6','7','8','9']:
+        bts[o-1] = c.blue + 'o' + c.base3
         break
