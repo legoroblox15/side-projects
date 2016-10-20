@@ -7,7 +7,15 @@ import random
 def clear():
   print(c.clear,end='')
 
-items = ['  Mask   ','Material ',' Pattern ','  Money  ','   Mod   ','   EXP   ','  Boost  ']
+items = [,'Material ',' Pattern ','  Money  ','   Mod   ','   EXP   ','  Boost  ']
+
+card1 = random.randint(1000)
+card2 = random.randint(1000)
+card3 = ranodm.randint(1000)
+
+def eval_number(number):
+  if number >= 1 and number <= 487:
+    return '  Mask   '
 
 while True:
   clear()
