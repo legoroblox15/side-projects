@@ -74,7 +74,11 @@ while True:
     print(c.violet + '      H' + c.base3 + ' aughtiness.')
   else:
     print(result)
-  number = input(c.blue + '>>> ')
+  try:
+    number = input(c.blue + '>>> ')
+  except KeyboardInterrupt:
+    print(c.clear,end='')
+    break
   result = ''
   number = re.sub('\\D','',number)
   number = re.sub('^0*$','0',number)
