@@ -2,7 +2,9 @@
 import skilstak.colors as c
 import time
 
-while True:
-  print(c.clear)
-  print(c.random() + 'noobs')
-  #time.sleep(1)
+def clear():
+  print(c.clear,end='')
+
+clear()
+name = input('What is your name?\n>>> ')
+print('Your name is: ' + name)
