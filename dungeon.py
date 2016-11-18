@@ -101,8 +101,6 @@ def build_dungeon():
   dungeon = add_tiles(c.base02 + c.green + '$',1,dungeon)
   
   dungeon = add_tiles(c.blue + '●',1,dungeon)
-  
-  dungeon = add_tiles(c.base02 + c.violet + '?', 10, dungeon)
     
   return dungeon
 
@@ -204,10 +202,22 @@ def moving(dungeon):
       else:
         clip = True
 
-    elif cheat_codes == 'WARpTOSpOT':
-      pass
+    elif cheat_codes == 'WARPTOSPOT':
+      try:
+        x_warp = int('X value?\n>>> ')
+        y_warp = int('Y value?\n>>> ')
+        dungeon[p_y][p_x] = last_tile_rep
+        last_tile_rep = dungeon[y_warp][x_warp]
+        dungeon[y_warp][x_warp] = c.blue + '●'
+        p_x = x_warp
+        p_y = y_warp
+        cheat_codes = '##########'
+        continue
+      except ValueError:
+        pass
+
     if debugging:
-      debug[0] = c.blue + '	player Coordinates: (' + str(p_x) + ', ' + str(p_y) + ')'
+      debug[0] = c.blue + '	Player Coordinates: (' + str(p_x) + ', ' + str(p_y) + ')'
       debug[1] = c.blue + '	Tile Standing On: "' + last_tile_rep + c.blue + '"' 
       debug[2] = c.blue + '	Cheat Code Keylogger: "' + cheat_codes + c.blue + '"'       
       debug[3] = c.blue + '	Clipping: ' + str(clip)
@@ -231,7 +241,7 @@ def moving(dungeon):
     print(c.base3 + '└─────────────────────────┘' + debug[30])
     mv = getch.getch()
 
-    if mv == 'x':
+    if mv == '\x1b':
       return False
     
     elif mv == 'n':
