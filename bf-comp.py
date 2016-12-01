@@ -41,4 +41,3 @@ for char in code:
     pack = do_char(char,memory,pointer)
     pointer = pack.pop()
     memory = pack.pop()
-print(memory,end='')
