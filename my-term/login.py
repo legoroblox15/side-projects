@@ -28,7 +28,11 @@ def login(password):
       else:
         typed_password += key
   return False
-    
+
+def navigate():
+  cursor = c.cyan + 'admin'
+  input()
+
 if login('12345'):
   clear()
   print('You made it')
