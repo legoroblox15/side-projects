@@ -23,7 +23,7 @@ def set_path():
   
   path_tiles = [[seed_x,seed_y]]
   branches = [[seed_x,seed_y,None]]
-  
+
   while True:
     branch = random.choice(branches)
     branches.remove(branch)
