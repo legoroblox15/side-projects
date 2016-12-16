@@ -1,0 +1,18 @@
+{
+  "name":"~",
+  "files":[
+    {
+      "name":"Test File",
+      "text":"Wazzup World!"
+    },
+    {
+      "name":"Test Dir",
+      "files":[
+        {
+          "name":"Test File in Test Dir",
+          "text":"It sure is dark in this dir."
+        }
+      ]
+    }
+  ]
+}

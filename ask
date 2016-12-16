@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+import skilstak.colors as c
+def clear():
+  print(c.clear + c.reset,end='')
+
+def ask(prompt,answer_type=str,answer_line='>>> ',allow=[],veto=[],use_getch=False):
+  answer = None
+  if use_getch:
+    import getch
+  if answer_type in (list, dict):
+    from ast import literal_eval
+  while answer in veto or not isinstance(answer, answer_type) or answer not in allow and allow != []:
+    clear()
+    print(prompt + '\n' + answer_line,end='')
+    try:
+      answer = getch.getch()
+    except UnboundLocalError:
+      answer = input()
+    try:
+      if answer_type == int:
+        answer = int(answer)
+      if answer_type == float:
+        answer = float(answer)
+      if answer_type in (list, dict):
+        answer = literal_eval(answer)
+    except (ValueError, SyntaxError):
+      pass
+  clear()
+  return answer
+
+if __name__ == '__main__':
+  ask('Give me an Int!',int)
+  ask('Give me an Float!',float)
+  ask('Give me a String!')
+  ask('Give me a List!',list)
+  ask('Give me a Dictionary!',dict)

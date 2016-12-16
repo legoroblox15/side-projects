@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import skilstak.colors as c
 import getch
-
+import json
 def clear():
   print(c.clear,end='')
 
@@ -30,11 +30,19 @@ def login(password):
   return False
 
 def navigate():
-  cursor = c.cyan + 'admin'
-  input()
+  with open('/home/error404/side-projects/my-term/admin_data.json') as data:
+    files = json.load(data)
+    data.close()
+  
+  cursor = c.base1 + 'admin' + c.base01 + '@' + c.base00 + 'terminal:' + c.yellow + '~' + c.cyan + '$ '
+  clear()
+  command = input(cursor)
+  
+  if command.startswith('cd '):
+    name = command.split(' ').pop()
 
 if login('12345'):
-  clear()
-  print('You made it')
+  while True:
+    navigate()
 else:
   clear()
