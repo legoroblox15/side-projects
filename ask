@@ -4,18 +4,35 @@ def clear():
   print(c.clear + c.reset,end='')
 
 def ask(prompt,answer_type=str,answer_line='>>> ',allow=[],veto=[],use_getch=False):
+
+    # Function Description:  Function that acts as a smart input statement that only allows input of certain data types. Also whitelists and blacklists specific inputs.
+
+    # Variable decriptions:
+    # - prompt: Prints the message like a normal input statement.
+    # - answer_type: The desired data type that you want the user to input.
+    # - answer_line: Text before line feed.
+    # - allow: whitelists specific inputs.
+    # - veto: blacklists specific learning.
+    # - use_getch: takes input from a single keystroke 
+
   answer = None
-  if use_getch:
+  if use_getch and answer_type not in [list, dict]:
     import getch
+  else:
+    use_getch = False
+  
   if answer_type in (list, dict):
     from ast import literal_eval
+
   while answer in veto or not isinstance(answer, answer_type) or answer not in allow and allow != []:
     clear()
+    
     print(prompt + '\n' + answer_line,end='')
     try:
       answer = getch.getch()
     except UnboundLocalError:
       answer = input()
+    
     try:
       if answer_type == int:
         answer = int(answer)
@@ -23,6 +40,7 @@ def ask(prompt,answer_type=str,answer_line='>>> ',allow=[],veto=[],use_getch=Fal
         answer = float(answer)
       if answer_type in (list, dict):
         answer = literal_eval(answer)
+    
     except (ValueError, SyntaxError):
       pass
   clear()

@@ -30,7 +30,7 @@ while True:
   elif move == '\x1b':
     clear()
     break
-  if numb < 32:
-    numb = 32
+  if numb < 34:
+    numb = 34
   elif numb > 55293:
     numb = 55293

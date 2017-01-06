@@ -8,7 +8,7 @@ def trolling(username,domain,path):
     pass # <-- code here
   signal.signal(signal.SIGTSTP, handler) 
   time.sleep(2)
-  cursor = c.base1 + username + c.base01 + '@' + c.base00 + domain + ':' + c.yellow + path + c.cyan + '$' + c.base3 + ' '
+  cursor = c.base1 + username + c.base01 + '@' + c.base00 + domain + ':' + c.yellow + path + c.cyan + '$' + c.reset + ' '
   while True:
     try:
       command = input(cursor)
