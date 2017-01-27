@@ -104,14 +104,14 @@ def build_dungeon():
     
   return dungeon
 
-def moving(dungeon):
+def printing(dungeon):
   tattle = "It sure is dark"
-  last_tile_rep = c.base03 + '$'
   cheat_codes = ''
   debug = ['' for blank in range(31)]
   debugging = False
   mv = ''
   clip = True
+
   for y_find in range(25):
     for x_find in range(25):
       if '●' in dungeon[y_find][x_find]:
@@ -237,8 +237,11 @@ def moving(dungeon):
           print(pr_x,end='')
       print(c.base3 + '│' + debug[debug_iter])
     print(c.base3 + '├─────────────────────────┤' + debug[28])
-    print(c.base3 + '│'+c.base01+' *** '+tattle+' *** '+c.base3+'│' + debug[29]) # Tattles need to be a total of 15 standard font widthed characters long
+    print(c.base3 + '│'+c.base01+' *** '+tattle+' *** '+c.base3+'│' + debug[29]) # Tattles need to be a total of 15 standard font width characters long
     print(c.base3 + '└─────────────────────────┘' + debug[30])
+    return dungeon
+
+def moving(dungeon)
     mv = getch.getch()
 
     if mv == '\x1b':
@@ -291,10 +294,16 @@ def moving(dungeon):
       clear()
       getch.pause('Fin.')
       return True
-  
-while True:
-  dungeon = build_dungeon()
-  staying = moving(dungeon)
-  if not staying:
-    break
-clear()
+
+if __name__ == '__main__':
+  staying == True
+  while True:
+    if staying == False:
+      break
+    dungeon = build_dungeon()
+    while True:
+      printing(dungeon)
+      staying = moving(dungeon)
+      if staying == False:
+        break
+  clear()

@@ -39,20 +39,22 @@ turn = 0
 
 while True:
   clear()
+
   verdict = gamehasnotbeenbeatyetdonotworryyoucanstillcontinuegivingturns(board)
   
-  if verdict == 'red':
-    print('Red wins!')
-    break
-  elif verdict == 'blue':
-    print('Blue wins!')
-    break
-
   for y in board:
     print(c.base3 + '│',end='')
     for x in y:
       print(x,end='')
     print(c.base3 + '│')
+  print(' 1234567')
+
+  if verdict == 'red':
+    print('\n'+c.red+chr(9673)+' Wins!')
+    break
+  elif verdict == 'blue':
+    print('\n'+c.blue+chr(9673)+' Wins!')
+    break
 
   turn += 1
   if turn % 2 == 1:
