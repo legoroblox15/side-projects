@@ -3,6 +3,7 @@ import skilstak.colors as c
 import random
 import time
 import getch
+from ask import ask
 
 def clear():
   print(c.clear,end='')
@@ -18,19 +19,17 @@ def add_tiles(tile,count,dungeon,width,height):
   return dungeon
 
 def set_path(width, height):
-  seed_x = random.randint(0,width-2)
-  seed_y = random.randint(0,height-2)
-  
-  path_tiles = [[seed_x,seed_y]]
-  branches = [[seed_x,seed_y,None]]
+  tile_worth = 1/(width*height*(1/4))
+  progress = 0
+  path_tiles = [[0,0]]
+  branches = [[0,0,None]]
 
-  while True:
+  while branches != []:
     branch = random.choice(branches)
     branches.remove(branch)
     directions = [1,2,3,4]
-    expanded = False
     trials = 0
-    while True:
+    while directions != []:
       trials += 1
       dir = random.choice(directions)
       directions.remove(dir)
@@ -39,52 +38,51 @@ def set_path(width, height):
           pass
         elif branch[0] == 1 or [branch[0]-3,branch[1]] in path_tiles:
           path_tiles.append([branch[0]-1,branch[1]])
-          expanded = True
+          progress += tile_worth
         else:
           path_tiles.append([branch[0]-1,branch[1]])
           path_tiles.append([branch[0]-2,branch[1]])
           branches.append([branch[0]-2,branch[1],'up'])
-          expanded = True
+          progress += tile_worth
           
       elif dir == 2: # right
         if branch[1] == width-1 or [branch[0],branch[1]+2] in path_tiles or branch[2] == 'right':
           pass
         elif branch[1] == width-2 or [branch[0],branch[1]+3] in path_tiles:
           path_tiles.append([branch[0],branch[1]+1])
-          expanded = True
+          progress += tile_worth
         else:
           path_tiles.append([branch[0],branch[1]+1])
           path_tiles.append([branch[0],branch[1]+2])
           branches.append([branch[0],branch[1]+2,'right'])
-          expanded = True
+          progress += tile_worth
             
       elif dir == 3: # down
         if branch[0] == height-1 or [branch[0]+2,branch[1]] in path_tiles or branch[2] == 'down':
           pass
         elif branch[0] == height-2 or [branch[0]+3,branch[1]] in path_tiles:
           path_tiles.append([branch[0]+1,branch[1]])
-          expanded = True
+          progress += tile_worth
         else:
           path_tiles.append([branch[0]+1,branch[1]])
           path_tiles.append([branch[0]+2,branch[1]])
           branches.append([branch[0]+2,branch[1],'down'])
-          expanded = True
+          progress += tile_worth
           
       elif dir == 4: # left
         if branch[1] == 0 or [branch[0],branch[1]-2] in path_tiles or branch[2] == 'left':
           pass
         elif branch[1] == 1 or [branch[0],branch[1]-3] in path_tiles:
           path_tiles.append([branch[0],branch[1]-1])
-          expanded = True
+          progress += tile_worth
         else:
           path_tiles.append([branch[0],branch[1]-1])
           path_tiles.append([branch[0],branch[1]-2])
           branches.append([branch[0],branch[1]-2,'left'])
-          expanded = True
-      if directions == []:
-        break
-    if branches == []:
-      break
+          progress += tile_worth
+
+      clear()
+      print(str(progress * 100)[:6] + '%')
   return path_tiles
 
 def build_dungeon(width, height):
@@ -92,9 +90,6 @@ def build_dungeon(width, height):
   dungeon = [[darkness + c.red + '█' for x in range(width)] for y in range(height)]
    
   path_tiles = set_path(width, height)
-  
-  input(dungeon)
-  input(path_tiles)
 
   for tile in path_tiles:
     dungeon[tile[0]][tile[1]] = ' '
@@ -121,11 +116,11 @@ def printing(dungeon,width,height):
   clear()
   tattle = 'It sure is dark'
 
-  p_coords = find_p(dungeon)
+  p_coords = find_p(dungeon,width,height)
   p_x = p_coords[0]
   p_y = p_coords[1]
   
-  e_coords = find_e(dungeon)
+  e_coords = find_e(dungeon,width,height)
   exit_x = e_coords[0]
   exit_y = e_coords[1]
 
@@ -186,8 +181,8 @@ def printing(dungeon,width,height):
   print(c.base3 + '└─────────────────────────┘')
   return dungeon
 
-def moving(dungeon,last_tile_rep):
-  p_coords = find_p(dungeon)
+def moving(dungeon,last_tile_rep,width,height):
+  p_coords = find_p(dungeon,width,height)
   p_x = p_coords[0]
   p_y = p_coords[1]
 
@@ -242,17 +237,20 @@ def moving(dungeon,last_tile_rep):
     return True
   return [dungeon,last_tile_rep]
 
-
 if __name__ == '__main__':
   clear()
-  width = int(input('Please input the width of your dungeon:\n>>> '))
-  clear()
-  height = int(input('Please input the height of your dungeon:\n>>> '))
+  width = 0
+  height = 0
+  while width <= 0 or height <= 0 or width * height < 2:
+    width = ask('Please input the width of your dungeon',int)
+    clear()
+    height = ask('Please input the height of your dungeon',int)
+    clear()
   dungeon = build_dungeon(width, height)
   last_tile_rep = c.base03 + '$'
   while True:
     dungeon = printing(dungeon,width,height)
-    dungeon = moving(dungeon,last_tile_rep)
+    dungeon = moving(dungeon,last_tile_rep,width,height)
     if dungeon == True:
       break
     else:
