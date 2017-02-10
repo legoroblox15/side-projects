@@ -7,19 +7,19 @@ import getch
 def clear():
   print(c.clear,end='')
 
-def add_tiles(tile,count,dungeon):
+def add_tiles(tile,count,dungeon,width,height):
   for adding in range(count):
     while True:
-      y = random.randint(0,24)
-      x = random.randint(0,24)
+      y = random.randint(0,height-1)
+      x = random.randint(0,width-1)
       if ' ' in dungeon[y][x]:
         dungeon[y][x] = tile
         break
   return dungeon
 
-def set_path():  
-  seed_x = random.randint(0,24)
-  seed_y = random.randint(0,24)
+def set_path(width, height):
+  seed_x = random.randint(0,width-2)
+  seed_y = random.randint(0,height-2)
   
   path_tiles = [[seed_x,seed_y]]
   branches = [[seed_x,seed_y,None]]
@@ -47,9 +47,9 @@ def set_path():
           expanded = True
           
       elif dir == 2: # right
-        if branch[1] == 24 or [branch[0],branch[1]+2] in path_tiles or branch[2] == 'right':
+        if branch[1] == width-1 or [branch[0],branch[1]+2] in path_tiles or branch[2] == 'right':
           pass
-        elif branch[1] == 23 or [branch[0],branch[1]+3] in path_tiles:
+        elif branch[1] == width-2 or [branch[0],branch[1]+3] in path_tiles:
           path_tiles.append([branch[0],branch[1]+1])
           expanded = True
         else:
@@ -59,9 +59,9 @@ def set_path():
           expanded = True
             
       elif dir == 3: # down
-        if branch[0] == 24 or [branch[0]+2,branch[1]] in path_tiles or branch[2] == 'down':
+        if branch[0] == height-1 or [branch[0]+2,branch[1]] in path_tiles or branch[2] == 'down':
           pass
-        elif branch[0] == 23 or [branch[0]+3,branch[1]] in path_tiles:
+        elif branch[0] == height-2 or [branch[0]+3,branch[1]] in path_tiles:
           path_tiles.append([branch[0]+1,branch[1]])
           expanded = True
         else:
@@ -87,223 +87,175 @@ def set_path():
       break
   return path_tiles
 
-def build_dungeon():
+def build_dungeon(width, height):
   darkness = c.base02
-  dungeon = [[darkness + c.red + '█' for x in range(25)] for y in range(25)]
+  dungeon = [[darkness + c.red + '█' for x in range(width)] for y in range(height)]
+   
+  path_tiles = set_path(width, height)
   
-  path_tiles = set_path()
-  
-  total_tiles = -1
+  input(dungeon)
+  input(path_tiles)
+
   for tile in path_tiles:
-    dungeon[tile[0]][tile[1]] = c.base3 + ' '
-    total_tiles += 1
+    dungeon[tile[0]][tile[1]] = ' '
+
+  dungeon = add_tiles(c.base02 + c.green + '$',1,dungeon,width,height)
   
-  dungeon = add_tiles(c.base02 + c.green + '$',1,dungeon)
-  
-  dungeon = add_tiles(c.blue + '●',1,dungeon)
+  dungeon = add_tiles(c.blue + '●',1,dungeon,width,height)
     
   return dungeon
 
-def printing(dungeon):
-  tattle = "It sure is dark"
-  cheat_codes = ''
-  debug = ['' for blank in range(31)]
-  debugging = False
-  mv = ''
-  clip = True
-
-  for y_find in range(25):
-    for x_find in range(25):
+def find_p(dungeon,width,height):
+  for y_find in range(height):
+    for x_find in range(width):
       if '●' in dungeon[y_find][x_find]:
-        p_y = y_find
-        p_x = x_find
-        
-  for y_find in range(25):
-    for x_find in range(25):
+        return [x_find,y_find]
+
+def find_e(dungeon,width,height):
+  for y_find in range(height):
+    for x_find in range(width):
       if c.green + '$' in dungeon[y_find][x_find]:
-        exit_y = y_find
-        exit_x = x_find
-          
-  while True:
-    clear()
-    if p_x >= 1:
-      dungeon[p_y][p_x-1] = dungeon[p_y][p_x-1].split(c.base02).pop() # left
-      
-    if p_x >= 1 and p_y >= 1:
-      dungeon[p_y-1][p_x-1] = dungeon[p_y-1][p_x-1].split(c.base02).pop() # upper left
-      
-    if p_y >= 1:
-      dungeon[p_y-1][p_x] = dungeon[p_y-1][p_x].split(c.base02).pop() # up  
-      
-    if p_x <= 23 and p_y >= 1:
-      dungeon[p_y-1][p_x+1] = dungeon[p_y-1][p_x+1].split(c.base02).pop() # upper right
-      
-    if p_x <= 23:
-      dungeon[p_y][p_x+1] = dungeon[p_y][p_x+1].split(c.base02).pop() # right
-      
-    if p_x <= 23 and p_y <= 23:
-      dungeon[p_y+1][p_x+1] = dungeon[p_y+1][p_x+1].split(c.base02).pop() # lower right
-      
-    if p_y <= 23:
-      dungeon[p_y+1][p_x] = dungeon[p_y+1][p_x].split(c.base02).pop() # down
-    
-    if p_x >= 1 and p_y <= 23:
-      dungeon[p_y+1][p_x-1] = dungeon[p_y+1][p_x-1].split(c.base02).pop() # lower left
-    
-    corner_x = exit_x
-    corner_y = p_y
-    
-    base = abs(p_x - corner_x)
-    height = abs(exit_y - corner_y)
-    
-    left = base ** 2 + height ** 2
-    hypo = round(left ** .5)
-    hypo = hypo + random.randint(0,2) * random.choice([-1,1])
-    if hypo < 0:
-      hypo = 0
-    
-    if hypo <= 9:
-      hypo = str(hypo) + ' '
-    else:
-      hypo = str(hypo)
-    
-    if len(cheat_codes) == 10:
-      cheat_codes = cheat_codes[1:] + mv
-    else:
-      cheat_codes += mv
+        return [x_find,y_find]
 
-    if cheat_codes == 'GENESIS1:3':
-      for y in range(25):
-        for x in range(25):
-          dungeon[y][x] = dungeon[y][x].split(c.base02).pop()
+def printing(dungeon,width,height):
+  clear()
+  tattle = 'It sure is dark'
 
-    elif cheat_codes == 'MAKEITDARK':
-      for y in range(25):
-        for x in range(25):
-          if not dungeon[y][x].startswith(c.base02):
-            dungeon[y][x] = c.base02 + dungeon[y][x]
+  p_coords = find_p(dungeon)
+  p_x = p_coords[0]
+  p_y = p_coords[1]
+  
+  e_coords = find_e(dungeon)
+  exit_x = e_coords[0]
+  exit_y = e_coords[1]
 
-    elif cheat_codes == 'IHATEDOORS':
-      for y in range(25):
-        for x in range(25):
-          if '?' in dungeon[y][x]:
-            dungeon[y][x] = ' '
-
-    elif cheat_codes == 'DEBUGSTUFF':
-      if debug != ['' for blank in range(31)]:
-        debug = ['' for blank in range(31)]
-        debugging = False
+  if p_x >= 1:
+    dungeon[p_y][p_x-1] = dungeon[p_y][p_x-1].split(c.base02).pop() # left
+    
+  if p_x >= 1 and p_y >= 1:
+    dungeon[p_y-1][p_x-1] = dungeon[p_y-1][p_x-1].split(c.base02).pop() # upper left
+    
+  if p_y >= 1:
+    dungeon[p_y-1][p_x] = dungeon[p_y-1][p_x].split(c.base02).pop() # up  
+    
+  if p_x <= width-2 and p_y >= 1:
+    dungeon[p_y-1][p_x+1] = dungeon[p_y-1][p_x+1].split(c.base02).pop() # upper right
+    
+  if p_x <= width-2:
+    dungeon[p_y][p_x+1] = dungeon[p_y][p_x+1].split(c.base02).pop() # right
+    
+  if p_x <= width-2 and p_y <= height-2:
+    dungeon[p_y+1][p_x+1] = dungeon[p_y+1][p_x+1].split(c.base02).pop() # lower right
+    
+  if p_y <= height-2:
+    dungeon[p_y+1][p_x] = dungeon[p_y+1][p_x].split(c.base02).pop() # down
+  
+  if p_x >= 1 and p_y <= height-2:
+    dungeon[p_y+1][p_x-1] = dungeon[p_y+1][p_x-1].split(c.base02).pop() # lower left
+  
+  corner_x = exit_x
+  corner_y = p_y
+  
+  base = abs(p_x - corner_x)
+  height = abs(exit_y - corner_y)
+  
+  left = base ** 2 + height ** 2
+  hypo = round(left ** .5)
+  hypo = hypo + random.randint(0,2) * random.choice([-1,1])
+  if hypo < 0:
+    hypo = 0
+  
+  if hypo <= 9:
+    hypo = str(hypo) + ' '
+  else:
+    hypo = str(hypo)
+  
+  print(c.base3 + '┌─────────────────────────┐' )
+  print(c.base3 + '│  Shattered Compass: ' + hypo + '  │')
+  print(c.base3 + '├─────────────────────────┤')
+  for pr_y in dungeon:
+    print(c.base3 + '│',end='')
+    for pr_x in pr_y:
+      if c.base02 in pr_x:
+        print(' ',end='')
       else:
-        debugging = True
+        print(pr_x,end='')
+    print(c.base3 + '│')
+  print(c.base3 + '├─────────────────────────┤')
+  print(c.base3 + '│'+c.base01+' *** '+tattle+' *** '+c.base3+'│') # Tattles need to be a total of 15 standard font width characters long
+  print(c.base3 + '└─────────────────────────┘')
+  return dungeon
 
-    elif cheat_codes == 'NOMASWALLS':
-      if clip:
-        clip = False
-      else:
-        clip = True
+def moving(dungeon,last_tile_rep):
+  p_coords = find_p(dungeon)
+  p_x = p_coords[0]
+  p_y = p_coords[1]
 
-    elif cheat_codes == 'WARPTOSPOT':
-      try:
-        x_warp = int('X value?\n>>> ')
-        y_warp = int('Y value?\n>>> ')
+  mv = getch.getch()
+
+  if mv == '\x1b':
+    return True
+  
+  elif mv == 'w':
+    try:
+      if '█' not in dungeon[p_y-1][p_x] and p_y-1 >= 0:
+        last_tile = dungeon[p_y-1][p_x]
         dungeon[p_y][p_x] = last_tile_rep
-        last_tile_rep = dungeon[y_warp][x_warp]
-        dungeon[y_warp][x_warp] = c.blue + '●'
-        p_x = x_warp
-        p_y = y_warp
-        cheat_codes = '##########'
-        continue
-      except ValueError:
-        pass
+        last_tile_rep = last_tile
+        p_y -= 1
+        dungeon[p_y][p_x] = c.blue + '●'
+    except IndexError:
+      pass
+  elif mv == 'a':
+    try:
+      if '█' not in dungeon[p_y][p_x-1] and p_x-1 >= 0:
+        last_tile = dungeon[p_y][p_x-1]
+        dungeon[p_y][p_x] = last_tile_rep
+        last_tile_rep = last_tile
+        p_x -= 1
+        dungeon[p_y][p_x] = c.blue + '●'
+    except IndexError:
+      pass
+  elif mv == 's':
+    try:
+      if '█' not in dungeon[p_y+1][p_x]:
+        last_tile = dungeon[p_y+1][p_x]
+        dungeon[p_y][p_x] = last_tile_rep
+        last_tile_rep = last_tile
+        p_y += 1
+        dungeon[p_y][p_x] = c.blue + '●'
+    except IndexError:
+      pass
+  elif mv == 'd':
+    try:
+      if '█' not in dungeon[p_y][p_x+1]:
+        last_tile = dungeon[p_y][p_x+1]
+        dungeon[p_y][p_x] = last_tile_rep
+        last_tile_rep = last_tile
+        p_x += 1
+        dungeon[p_y][p_x] = c.blue + '●'
+    except IndexError:
+      pass
+  if c.green + '$' in last_tile_rep:
+    clear()
+    getch.pause('Fin.')
+    return True
+  return [dungeon,last_tile_rep]
 
-    if debugging:
-      debug[0] = c.blue + '	Player Coordinates: (' + str(p_x) + ', ' + str(p_y) + ')'
-      debug[1] = c.blue + '	Tile Standing On: "' + last_tile_rep + c.blue + '"' 
-      debug[2] = c.blue + '	Cheat Code Keylogger: "' + cheat_codes + c.blue + '"'       
-      debug[3] = c.blue + '	Clipping: ' + str(clip)
-      debug[4] = c.blue + '	Debugging: ' + str(debugging) 	
-
-    print(c.base3 + '┌─────────────────────────┐' + debug[0])
-    print(c.base3 + '│  Shattered Compass: ' + hypo + '  │' + debug[1])
-    print(c.base3 + '├─────────────────────────┤' + debug[2])
-    debug_iter = 2
-    for pr_y in dungeon:
-      debug_iter += 1
-      print(c.base3 + '│',end='')
-      for pr_x in pr_y:
-        if c.base02 in pr_x:
-          print(' ',end='')
-        else:
-          print(pr_x,end='')
-      print(c.base3 + '│' + debug[debug_iter])
-    print(c.base3 + '├─────────────────────────┤' + debug[28])
-    print(c.base3 + '│'+c.base01+' *** '+tattle+' *** '+c.base3+'│' + debug[29]) # Tattles need to be a total of 15 standard font width characters long
-    print(c.base3 + '└─────────────────────────┘' + debug[30])
-    return dungeon
-
-def moving(dungeon)
-    mv = getch.getch()
-
-    if mv == '\x1b':
-      return False
-    
-    elif mv == 'n':
-      return True
-    
-    elif mv == 'w':
-      try:
-        if '█' not in dungeon[p_y-1][p_x] and p_y-1 >= 0 or clip == False:
-          last_tile = dungeon[p_y-1][p_x]
-          dungeon[p_y][p_x] = last_tile_rep
-          last_tile_rep = last_tile
-          p_y -= 1
-          dungeon[p_y][p_x] = c.blue + '●'
-      except IndexError:
-        pass
-    elif mv == 'a':
-      try:
-        if '█' not in dungeon[p_y][p_x-1] and p_x-1 >= 0 or clip == False:
-          last_tile = dungeon[p_y][p_x-1]
-          dungeon[p_y][p_x] = last_tile_rep
-          last_tile_rep = last_tile
-          p_x -= 1
-          dungeon[p_y][p_x] = c.blue + '●'
-      except IndexError:
-        pass
-    elif mv == 's':
-      try:
-        if '█' not in dungeon[p_y+1][p_x] or clip == False:
-          last_tile = dungeon[p_y+1][p_x]
-          dungeon[p_y][p_x] = last_tile_rep
-          last_tile_rep = last_tile
-          p_y += 1
-          dungeon[p_y][p_x] = c.blue + '●'
-      except IndexError:
-        pass
-    elif mv == 'd':
-      try:
-        if '█' not in dungeon[p_y][p_x+1] or clip == False:
-          last_tile = dungeon[p_y][p_x+1]
-          dungeon[p_y][p_x] = last_tile_rep
-          last_tile_rep = last_tile
-          p_x += 1
-          dungeon[p_y][p_x] = c.blue + '●'
-      except IndexError:
-        pass
-    if c.green + '$' in last_tile_rep:
-      clear()
-      getch.pause('Fin.')
-      return True
 
 if __name__ == '__main__':
-  staying == True
+  clear()
+  width = int(input('Please input the width of your dungeon:\n>>> '))
+  clear()
+  height = int(input('Please input the height of your dungeon:\n>>> '))
+  dungeon = build_dungeon(width, height)
+  last_tile_rep = c.base03 + '$'
   while True:
-    if staying == False:
+    dungeon = printing(dungeon,width,height)
+    dungeon = moving(dungeon,last_tile_rep)
+    if dungeon == True:
       break
-    dungeon = build_dungeon()
-    while True:
-      printing(dungeon)
-      staying = moving(dungeon)
-      if staying == False:
-        break
+    else:
+      last_tile_rep = dungeon[1]
+      dungeon = dungeon[0]
   clear()

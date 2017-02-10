@@ -8,8 +8,7 @@ def clear():
   print(c.clear,end='')
 
 def print_board(history,letterboard):
-  print('│' + history[19] + '│\t' + letterboard[a] + ' ' + letterboard[b] + ' ' + letterboard[c] + ' ' + letterboard[d] + ' ' + letterboard[e] + ' ' + letterboard[f]
-
+  print('│' + history[19] + '│\t' + letterboard[a] + ' ' + letterboard[b] + ' ' + letterboard[c] + ' ' + letterboard[d] + ' ' + letterboard[e] + ' ' + letterboard)
 words = valid_words()
 
 history = ['       ' for line in range(20)]
