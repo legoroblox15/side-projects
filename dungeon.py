@@ -114,7 +114,6 @@ def find_e(dungeon,width,height):
 
 def printing(dungeon,width,height):
   clear()
-  tattle = 'It sure is dark'
 
   p_coords = find_p(dungeon,width,height)
   p_x = p_coords[0]
@@ -165,9 +164,7 @@ def printing(dungeon,width,height):
   else:
     hypo = str(hypo)
   
-  print(c.base3 + '┌─────────────────────────┐' )
-  print(c.base3 + '│  Shattered Compass: ' + hypo + '  │')
-  print(c.base3 + '├─────────────────────────┤')
+  print(c.base3 + '┌' + '─' * width + '┐' )
   for pr_y in dungeon:
     print(c.base3 + '│',end='')
     for pr_x in pr_y:
@@ -176,9 +173,8 @@ def printing(dungeon,width,height):
       else:
         print(pr_x,end='')
     print(c.base3 + '│')
-  print(c.base3 + '├─────────────────────────┤')
-  print(c.base3 + '│'+c.base01+' *** '+tattle+' *** '+c.base3+'│') # Tattles need to be a total of 15 standard font width characters long
-  print(c.base3 + '└─────────────────────────┘')
+  print(c.base3 + '└' + '─' * width + '┘')
+  print('Shattered Compass: ' + hypo)
   return dungeon
 
 def moving(dungeon,last_tile_rep,width,height):
