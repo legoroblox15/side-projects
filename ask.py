@@ -24,7 +24,7 @@ def ask(prompt,answer_type=str,answer_line='>>> ',allow=[],veto=[],use_getch=Fal
   if answer_type in (list, dict):
     from ast import literal_eval
 
-  while answer in veto or not isinstance(answer, answer_type) or answer not in allow and allow != []:
+  while answer in veto or not isinstance(answer, answer_type) or answer not in allow and allow != []: # If answer is one of the vetoed words, if it couldn't cast into the wanted type, or answer is not one of the allowed words (only if there is atleast one allowed word), then continue running the loop.
     clear()
     
     print(prompt + '\n' + answer_line,end='')
@@ -32,18 +32,19 @@ def ask(prompt,answer_type=str,answer_line='>>> ',allow=[],veto=[],use_getch=Fal
       answer = getch.getch()
     except UnboundLocalError:
       answer = input()
-    
+
     try:
       if answer_type == int:
         answer = int(answer)
-      if answer_type == float:
+      elif answer_type == float:
         answer = float(answer)
-      if answer_type in (list, dict):
+      elif answer_type in (list, dict):
         answer = literal_eval(answer)
     
     except (ValueError, SyntaxError):
       pass
   clear()
+
   return answer
 
 if __name__ == '__main__':
