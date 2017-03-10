@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 import skilstak.colors as c
 from getch import getch
+from os import environ
+from re import sub
+
 def clear():
   print(c.clear,end='')
+clear()
 
-def accuse(string,feed='>>> '):
+def accuse(string,feed):
   print(feed,end='',flush=True)
 
   for letter in string:
@@ -12,9 +16,7 @@ def accuse(string,feed='>>> '):
     print(letter,end='',flush=True)
   print()
 
-username = 'error404'
-domain = 'skilstak'
-path = 'side-projects'
+cursor = c.base1 + environ['HOME'][6:] + 
 
-accuse('rm -rf *', c.base1 + username + c.base01 + '@' + c.base00 + domain + ':' + c.yellow + path + c.cyan + '$' + c.reset + ' ')
 
+print(cursor)
