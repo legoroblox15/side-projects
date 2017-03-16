@@ -5,6 +5,10 @@ import time
 import getch
 from ask import ask
 
+print(ascii('█'))
+
+raise
+
 def clear():
   print(c.clear,end='')
 
