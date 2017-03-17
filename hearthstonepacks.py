@@ -258,7 +258,7 @@ while running:
       print(c.clear,end='')
       if first_time:
         print('_______________\n_______________\n_______________\n_______________\n_______________\n')
-        print(c.base3+'Welcome, what pack do you want to open?\n'+c.orange+'[C] Classic\n'+c.red+'[G] Goblins vs Gnomes\n'+c.magenta+'[T] The Grand Tournament\n' + c.base00 + '[W] Comming soon: Wispers of Old Gods\n' + c.green + '[E] Exit\n'+c.base3+'Anything else put will open a random pack.\n\n')
+        print(c.base3+'Welcome, what pack do you want to open?\n'+c.orange+'[C] Classic\n'+c.red+'[G] Goblins vs Gnomes\n'+c.magenta+'[T] The Grand Tournament\n' + c.base00 + '[W] Comming soon: Whispers of Old Gods\n' + c.green + '[E] Exit\n'+c.base3+'Anything else put will open a random pack.\n\n')
       else:
         for order in range(cards_per_pack):
           print(cards.pop(random.randint(0,cards_per_pack_poploop-order)-1))

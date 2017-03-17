@@ -2,12 +2,9 @@
 import skilstak.colors as c
 from getch import getch
 import os
-from re import sub
 from socket import gethostname
 
-def clear():
-  print(c.clear,end='')
-clear()
+print(c.clear,end='')
 
 def accuse(message,feed):
   print(feed,end='',flush=True)
@@ -17,6 +14,8 @@ def accuse(message,feed):
     print(letter,end='',flush=True)
   print()
 
-cursor = c.base1 + os.environ['HOME'][6:] + c.base00 + '@' + gethostname().split('.')[0] + ':' + c.yellow + os.path.split(os.getcwd())[1] + c.cyan + '$' + c.reset + ' '
+def getlinefeed():
+  return c.base1 + os.environ['HOME'][6:] + c.base00 + '@' + gethostname().split('.')[0] + ':' + c.yellow + os.path.split(os.getcwd())[1] + c.cyan + '$' + c.reset + ' '
 
-accuse('Chris Mason is my favorite student in the widest world!',cursor)
+if __name__ == '__main__':
+  accuse('',getlinefeed())
