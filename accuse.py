@@ -4,7 +4,8 @@ from getch import getch
 import os
 from socket import gethostname
 
-print(c.clear,end='')
+def clear():
+  print(c.clear,end='')
 
 def accuse(message,feed):
   print(feed,end='',flush=True)
